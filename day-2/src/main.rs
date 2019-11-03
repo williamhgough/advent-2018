@@ -3,13 +3,13 @@ use std::collections::HashMap;
 use std::fs;
 
 fn main() {
-    let (twos, threes) = read_input("input.txt");
-    println!("Checksum: {}", twos * threes);
+    let checksum = find_checksum("input.txt");
+    println!("Checksum: {}", checksum);
 }
 
 // read_input will take a filename and read the contents
 // into the calibrator.
-fn read_input(file: &str) -> (i32, i32) {
+fn find_checksum(file: &str) -> i32 {
     let mut twos = 0;
     let mut threes = 0;
 
@@ -26,7 +26,7 @@ fn read_input(file: &str) -> (i32, i32) {
         }
     }
 
-    (twos, threes)
+    twos * threes
 }
 
 fn analyse_id(id: &str) -> (bool, bool) {
@@ -45,7 +45,7 @@ fn analyse_id(id: &str) -> (bool, bool) {
         };
     }
 
-    for (_, v) in letter_map {
+    for &v in letter_map.values() {
         if v == 3 {
             has_three = true;
         }
