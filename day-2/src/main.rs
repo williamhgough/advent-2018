@@ -101,30 +101,37 @@ fn common_correct_letters(first: &str, second: &str) -> Option<String> {
 #[cfg(test)]
 mod test {
     #[test]
-    fn works_with_two_letters() {
+    fn count_works_with_two_letters() {
         let (has_two, has_three) = crate::find_id_letter_counts("aabcdefg");
         assert_eq!(has_two, true);
         assert_eq!(has_three, false);
     }
 
     #[test]
-    fn works_with_three_letters() {
+    fn count_works_with_three_letters() {
         let (has_two, has_three) = crate::find_id_letter_counts("aaabcdefg");
         assert_eq!(has_two, false);
         assert_eq!(has_three, true);
     }
 
     #[test]
-    fn works_with_two_and_three_letters() {
+    fn count_works_with_two_and_three_letters() {
         let (has_two, has_three) = crate::find_id_letter_counts("aaabcdeefg");
         assert_eq!(has_two, true);
         assert_eq!(has_three, true);
     }
 
     #[test]
-    fn does_not_count_4_of_same_letters() {
+    fn count_does_not_count_4_of_same_letters() {
         let (has_two, has_three) = crate::find_id_letter_counts("aaaabcdefg");
         assert_eq!(has_two, false);
         assert_eq!(has_three, false);
+    }
+
+    #[test]
+    fn common_letters_works_with_match() {
+        if let Some(x) = crate::common_correct_letters("aabcdef", "aabcdgf") {
+            assert_eq!("aabcdf", x);
+        }
     }
 }
