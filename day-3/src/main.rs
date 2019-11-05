@@ -6,11 +6,7 @@ use std::fs;
 fn main() {
     let contents = fs::read_to_string("input.txt").expect("Something went wrong reading the file");
     let iter: Vec<&str> = contents.split('\n').collect();
-    let mut fabric = Fabric {
-        height: 1000,
-        width: 1000,
-        positions: vec![],
-    };
+    let mut fabric = Fabric::from(1000, 1000);
 
     for &i in &iter {
         fabric.add_claim(Claim::from(i));
@@ -27,6 +23,13 @@ struct Fabric {
 }
 
 impl Fabric {
+    fn from(width: i32, height: i32) -> Fabric {
+        Fabric {
+            height: height,
+            width: width,
+            positions: vec![],
+        }
+    }
     fn add_claim(&mut self, claim: Claim) {
         self.positions.push(claim);
     }
