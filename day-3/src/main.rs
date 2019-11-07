@@ -19,20 +19,29 @@ fn main() {
     println!("total claimed squares: {}", fabric.total_squares());
 
     println!("clash count: {}", fabric.calculate_clashes());
+
+    if let Some(id) = fabric.find_unconflicted_claim() {
+        println!("unconflicting ID: {}", id);
+    }
 }
 
 // grid holds all the state of the fabric.
 struct Fabric {
     positions: HashMap<(i32, i32), Vec<Claim>>,
+    claims: Vec<Claim>,
 }
 
 impl Fabric {
     fn new() -> Fabric {
         Fabric {
             positions: HashMap::new(),
+            claims: vec![],
         }
     }
     fn add_claim(&mut self, claim: Claim) {
+        // ensure we record the individual claim
+        self.claims.push(claim.clone());
+        // record each square inch of the claim.
         for x in claim.left..(claim.left + claim.width) {
             for y in claim.top..(claim.top + claim.height) {
                 if x > 999 || y > 999 {
@@ -55,6 +64,33 @@ impl Fabric {
             .values()
             .filter(|claims| claims.len() as i32 >= 2)
             .count()
+    }
+
+    fn check_overlap(&self, claim: &Claim) -> bool {
+        for x in claim.left..(claim.left + claim.width) {
+            for y in claim.top..(claim.top + claim.height) {
+                match self.positions.get(&(x, y)) {
+                    Some(entry) => {
+                        if entry.len() > 1 {
+                            return true;
+                        }
+                    }
+                    None => {}
+                }
+            }
+        }
+        false
+    }
+
+    fn find_unconflicted_claim(&mut self) -> Option<String> {
+        for c in self.claims.iter() {
+            if !self.check_overlap(&c) {
+                let x = c.clone().id;
+                return Some(x);
+            }
+        }
+
+        None
     }
 
     fn total_squares(&self) -> usize {
