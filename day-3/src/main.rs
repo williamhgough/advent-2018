@@ -20,8 +20,8 @@ fn main() {
 
     println!("clash count: {}", fabric.calculate_clashes());
 
-    if let Some(id) = fabric.find_unconflicted_claim() {
-        println!("unconflicting ID: {}", id);
+    if let Some(id) = fabric.find_viable_claim() {
+        println!("viable claim ID: {}", id);
     }
 }
 
@@ -82,7 +82,7 @@ impl Fabric {
         false
     }
 
-    fn find_unconflicted_claim(&mut self) -> Option<String> {
+    fn find_viable_claim(&mut self) -> Option<String> {
         for c in self.claims.iter() {
             if !self.check_overlap(&c) {
                 let x = c.clone().id;
